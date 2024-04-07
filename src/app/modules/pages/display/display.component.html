@@ -1,0 +1,33 @@
+<app-header />
+<!-- // ! main content  -->
+<div class="main-box">
+  <h1 *ngIf="!codesList.length" style="margin: 1em 0 50vh 2em">
+    ❌ No login qr codes found.
+  </h1>
+  <div class="grid-qr">
+    <div *ngFor="let qrCode of codesList; let i = index">
+      <article style="text-align: center">
+        <p class="pill">
+          {{ qrCode.id }}
+        </p>
+        <h6 class="card-title">
+          {{ qrCode.qrCodeString.split("$")[3] }}
+        </h6>
+        <qrcode
+          #qrcode
+          [qrdata]="qrCode.qrCodeString"
+          [width]="255"
+          [scale]="4"
+          [errorCorrectionLevel]="'M'"
+          [imageSrc]="'../../../../assets/'" 
+          [imageHeight]="74"
+          [imageWidth]="74"
+        ></qrcode>
+        <footer>
+          <button (click)="saveAsImage('image/png', i)">Download</button>
+        </footer>
+      </article>
+    </div>
+  </div>
+</div>
+<app-footer />

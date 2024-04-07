@@ -1,0 +1,39 @@
+.main-box {
+  max-width: 1200px;
+  margin: auto;
+}
+.grid-qr {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1em;
+  place-items: center;
+
+  @media screen and (max-width: 430px) {
+    grid-template-columns: 1fr;
+  }
+  @media screen and (max-width: 768px) and (min-width: 430px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  article {
+    width: auto;
+    text-align: center;
+  }
+}
+.grid-qr > div > article {
+  max-width: 17em;
+}
+article > .pill {
+  background-color: #f76e6e;
+  color: white;
+  border-radius: 50px;
+  height: fit-content;
+  width: 3em;
+  font-size: 1em;
+  font-weight: 500;
+}
+.card-title {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

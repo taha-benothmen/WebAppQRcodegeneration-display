@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root:not([data-theme="dark"]) {
+  --primary: #ed0909 !important;
+  --primary-hover: #fc320a91 !important;
+  --primary-focus: rgba(216, 27, 96, 0.125);
+  --primary-inverse: #fff;
+  //custom colors for extra stuff
+  --primaryShade: #fbd5d5;
+  --anchorShade: #f86464;
+}
+
+*,
+*::before,
+*::after {
+  font: inherit;
+  font-family: "Poppins", Arial, Helvetica, sans-serif !important;
+  text-rendering: optimizeLegibility;
+}
+
+.display-card {
+  background: var(--primaryShade);
+  border-radius: 14px;
+  padding: 3em 2em !important;
+  margin-bottom: 2em;
+}
+.display-text-extra {
+  margin: 0;
+  font-size: 2.8em;
+  font-weight: 300;
+  font-style: italic;
+  color: #212529;
+}
+.subtitle-sb {
+  margin: 0;
+  font-weight: 600;
+  color: #212529;
+}
+// media queries for responsiveness
+@media screen and (max-width: 425px) {
+  .display-text-extra {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 300;
+    font-style: italic;
+    color: #212529;
+  }
+}

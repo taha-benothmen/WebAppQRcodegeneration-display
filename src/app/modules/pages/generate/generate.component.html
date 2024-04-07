@@ -1,0 +1,247 @@
+<app-header></app-header>
+<!-- Decoration card  -->
+<div class="container display-card">
+  <div>
+    <p class="subtitle-sb">Let's secure your factory !</p>
+    <h1 class="display-text-extra">Online login QR code generator.</h1>
+  </div>
+</div>
+<!-- Main Form for generation -->
+<main class="container" style="display: flex; flex-direction: column">
+  <form [formGroup]="qrCodeForm" (ngSubmit)="onSubmit($event)">
+    <div class="grid">
+      <!-- Date selectors -->
+      <label for="startDate">
+        Start date
+        <input
+          type="datetime-local"
+          id="startDate"
+          name="startDate"
+          formControlName="startDate"
+        />
+        <small
+          *ngIf="startDate && startDate.invalid && startDate.touched"
+          style="color: red"
+          >Start Date is not valid !
+        </small>
+      </label>
+
+      <label for="endDate">
+        End date
+        <input
+          type="datetime-local"
+          id="endDate"
+          name="endDate"
+          formControlName="endDate"
+        />
+        <small
+          *ngIf="endDate && endDate.invalid && endDate.touched"
+          style="color: red"
+          >End date must be after start date !
+        </small>
+      </label>
+    </div>
+    <fieldset>
+      <!-- extra info  -->
+      <label for="info"
+        >UserName
+        <input
+          type="text"
+          id="info"
+          name="info"
+          placeholder="Info here..."
+          formControlName="info"
+        />
+        <small *ngIf="info && info.invalid && info.touched" style="color: red"
+          >UserName is not valid !
+        </small>
+      </label>
+      <!-- password   -->
+      <label for="password"
+        >Password
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="password here..."
+          formControlName="password"
+        />
+        <small
+          *ngIf="password && password.invalid && password.touched"
+          style="color: red"
+          >Minimum password length is 4 characters !
+        </small>
+        <small
+          >Make sure to remember your password, don't share it with unauthorized
+          personnel.</small
+        >
+      </label>
+    </fieldset>
+
+    <!-- // ! Rights section  -->
+    <fieldset>
+      <label for="rights1">
+        <input
+          type="checkbox"
+          id="rights1"
+          name="rights1"
+          role="switch"
+          formControlName="rights1"
+        />
+        Responsable
+      </label>
+      <label for="rights2">
+        <input
+          type="checkbox"
+          id="rights2"
+          name="rights2"
+          role="switch"
+          formControlName="rights2"
+        />
+        Department lead
+      </label>
+      <small
+        *ngIf="rights1 && rights1.invalid && rights1.touched"
+        style="color: red"
+        >Scan right is obligatory.
+      </small>
+    </fieldset>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="!qrCodeForm.valid">
+      Generate QR Code
+    </button>
+  </form>
+</main>
+
+<!-- ! Modal code -->
+<dialog id="confirmation-modal">
+  <article style="padding-top: 1em">
+    <a
+      style="position: relative; top: 1.5em"
+      href="#close"
+      aria-label="Close"
+      class="close"
+      data-target="confirmation-modal"
+      (click)="toggleModal($event)"
+    >
+    </a>
+
+    <main id="mainContentArea">
+      <iframe
+        style="max-width: 100%; height: 11vh"
+        src="https://embed.lottiefiles.com/animation/72785"
+      ></iframe>
+
+      <h3>Confirm your information</h3>
+
+      <p>Please thoroughly check the data to ensure it is correct.</p>
+      <p>
+        <strong>Start date: </strong
+        >{{ this.qrCodeForm.value.startDate | date : "long" }}
+      </p>
+      <p>
+        <strong>End date: </strong>
+        {{ this.qrCodeForm.value.endDate | date : "long" }}
+      </p>
+      <p><strong>Misc. info: </strong> {{ this.qrCodeForm.value.info }}</p>
+      <p>
+        <strong>Rights: </strong>
+        {{
+          (this.qrCodeForm.value.rights1 ? "Scanning articles" : "") +
+            (this.qrCodeForm.value.rights2
+              ? " & editing of verification list"
+              : "") +
+            "."
+        }}
+      </p>
+      <p>
+        <strong style="text-decoration: underline">Your password: </strong>
+        {{ this.qrCodeForm.value.password }}
+      </p>
+    </main>
+    <footer>
+      <a
+        href="#cancel"
+        role="button"
+        class="secondary"
+        data-target="confirmation-modal"
+        (click)="toggleModal($event)"
+      >
+        Cancel
+      </a>
+      <a
+        href="#confirm"
+        role="button"
+        data-target="confirmation-modal"
+        (click)="handleQrCodeDisplay($event)"
+      >
+        Confirm
+      </a>
+    </footer>
+  </article>
+</dialog>
+
+<!-- ! QR code dispaly modal  -->
+
+<dialog id="display-modal">
+  <article style="padding-top: 1em">
+    <a
+      style="position: relative; top: 1.5em"
+      href="#close"
+      aria-label="Close"
+      class="close"
+      data-target="display-modal"
+      (click)="navigateEnd()"
+    >
+    </a>
+
+    <main id="mainContentArea">
+      <h3>Generated QR code for login</h3>
+      <p>
+        This code is a secret, only share it with the corresponding workers.
+      </p>
+      <article
+        *ngIf="resultString"
+        style="margin: 0.5em auto; width: fit-content"
+        id="generatedCode"
+      >
+        <qrcode
+          #qrcode
+          *ngIf="resultString"
+          [qrdata]="resultString"
+          [width]="298"
+          [errorCorrectionLevel]="'M'"
+          [imageSrc]="'../../../../assets/qr_watermark.png'"
+          [imageHeight]="76"
+          [imageWidth]="76"
+        ></qrcode>
+      </article>
+    </main>
+    <footer>
+      <button
+        (click)="saveAsImage('image/png')"
+        role="button"
+        style="width: auto; margin-right: 1em"
+        class="primary"
+      >
+        <img
+          src="../../../../assets/download.gif"
+          alt="download me"
+          style="height: 1.4rem; margin: auto 10px auto auto; filter: invert(1)"
+        />Download PNG
+      </button>
+
+      <a
+        href="#confirm"
+        role="button"
+        data-target="display-modal"
+        (click)="navigateEnd()"
+        class="outline"
+        >✓ All good
+      </a>
+    </footer>
+  </article>
+</dialog>
+
+<app-footer></app-footer>

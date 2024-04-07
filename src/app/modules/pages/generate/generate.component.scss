@@ -1,0 +1,9 @@
+//needed for full screen confetti effect
+canvas {
+  z-index: 1000;
+  left: 0;
+  top: 40vh;
+  position: absolute;
+  height: 100%; /* we need these for full-screen effect */
+  width: 100%;
+}
